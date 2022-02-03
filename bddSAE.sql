@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS prend_un;
 DROP TABLE IF EXISTS Panier;
 DROP TABLE IF EXISTS Payement;
 DROP TABLE IF EXISTS Commande;
-DROP TABLE IF EXISTS fournisseur;
 DROP TABLE IF EXISTS Telephone;
 DROP TABLE IF EXISTS Adresse;
 DROP TABLE IF EXISTS Marque;
@@ -64,13 +63,6 @@ CREATE TABLE Adresse(
    PRIMARY KEY(id_adresse)
 );
 
-
-
-CREATE TABLE fournisseur(
-    id_fournisseur INT AUTO_INCREMENT,
-    libelle_fournisseur VARCHAR(255)
-);
-
 CREATE TABLE Telephone(
    id_telephone INT AUTO_INCREMENT,
    prix DECIMAL(7,2),
@@ -78,13 +70,10 @@ CREATE TABLE Telephone(
    id_marque INT NOT NULL,
    id_etatTelephone INT NOT NULL,
    id_TelephoneCouleur INT NOT NULL,
-   id_fournisseur INT NOT NULL,
-   stock INT,
    PRIMARY KEY(id_telephone),
    CONSTRAINT fk_id_marque FOREIGN KEY(id_marque) REFERENCES Marque(id_marque),
    CONSTRAINT fk_id_etatTelephone FOREIGN KEY(id_etatTelephone) REFERENCES Etat_telephone(id_etatTelephone),
-   CONSTRAINT fk_id_couleur FOREIGN KEY(id_TelephoneCouleur) REFERENCES Couleur(id_couleur),
-   CONSTRAINT fk_id_fournisseur FOREIGN KEY(id_fournisseur) REFERENCES fournisseur(id_fournisseur)
+   CONSTRAINT fk_id_couleur FOREIGN KEY(id_TelephoneCouleur) REFERENCES Couleur(id_couleur)
 );
 CREATE TABLE Commande(
    id_Commande INT AUTO_INCREMENT,
@@ -144,9 +133,6 @@ CREATE TABLE ligne_commande
     FOREIGN KEY (id_Telephone) REFERENCES Telephone(id_telephone),
     FOREIGN KEY (id_Commande) REFERENCES Commande (id_Commande)
 );
-
-
-
 INSERT INTO Client (username, password, role, est_actif, pseudo, email) VALUES
 ('Simon', '1004', 'Administrateur', 'OUI', 'Mizuzun', 'mizuzun03@gmail.com'),
 ('Adrien', 'éclaté_au_sol', 'Membre', 'NON', 'Kezku', 'Adrien@edu.univ-fcomte.fr'),
@@ -235,25 +221,17 @@ INSERT INTO Adresse (libelle_adresse) VALUES
 
 
 
-INSERT INTO Telephone(prix,Modele,id_marque,id_etatTelephone,id_TelephoneCouleur,stock,id_fournisseur) VALUES
-(1279.00,'Galaxy S21 Ultra 5G',1,10,10,15,1),
-(1259.00,'IPHONE 13 PRO MAX',2,2,2,23,2),
-(679.00,'HUAWEI MATE 40 PRO',10,1,3,14,3),
-(500.00,'Galaxy S20',7,8,9,1,4),
-(699.99,'IPHONE 13',6,9,1,0,5),
-(400.00,'HUAWEI MATE 30 PRO',5,4,5,27,6),
-(450.99,'XIAOMI MI 11',9,3,7,3,2),
-(200.00,'XIAOMI MI 8',4,5,8,12,3),
-(249.99,'HONOR 50 LITE',3,7,4,10,4),
-(499.90,'HONOR 50',8,6,6,11,5);
-
-INSERT INTO fournisseur(libelle_fournisseur) VALUES
-('ChinaseEntreprise'),
-('PSDdistribution'),
-('Mfrance'),
-('Malgérie'),
-('AlidinExport'),
-('spalalaExport');
+INSERT INTO Telephone(prix,Modele,id_marque,id_etatTelephone,id_TelephoneCouleur) VALUES
+(1279.00,'Galaxy S21 Ultra 5G',1,10,10),
+(1259.00,'IPHONE 13 PRO MAX',2,2,2),
+(679.00,'HUAWEI MATE 40 PRO',10,1,3),
+(500.00,'Galaxy S20',7,8,9),
+(699.99,'IPHONE 13',6,9,1),
+(400.00,'HUAWEI MATE 30 PRO',5,4,5),
+(450.99,'XIAOMI MI 11',9,3,7),
+(200.00,'XIAOMI MI 8',4,5,8),
+(249.99,'HONOR 50 LITE',3,7,4),
+(499.90,'HONOR 50',8,6,6);
 
 
 INSERT INTO Commande (date_achat,client_id,etat_id) VALUES
@@ -301,7 +279,6 @@ INSERT INTO ligne_commande(id_telephone, id_Commande, prix_unitaire, quantite_li
 (5,6,NULL,1),
 (7,5,NULL,1),
 (2,2,NULL,1);
-
 
 
 
