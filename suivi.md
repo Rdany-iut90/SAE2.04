@@ -1,13 +1,13 @@
-#Le suivi des différentes activitées de la SAE pour notre groupe#
+# Le suivi des différentes activitées de la SAE pour notre groupe#
 
 Semaine 1: 
-*1er scéance
+* 1er scéance
 Raphael DANY   : Création du compte Github et Pythonanywere et apprendre a utiliser Pythonanywere 
 
 Téo DECONINCK et Simon Nguyen: Création du MCD  + Création de table SQL 
 
 
-*2ième scéance 
+* 2ième scéance 
  
 Téo DECONINCK et Simon Nguyen: modification du MCD + créations des tables 
 
@@ -16,7 +16,7 @@ Raphael DANY : réalisation des insert après avoir corriger ses problèmes lié
  
 Semaine 2:
  
- *3ièm scéance 
+ * 3ièm scéance 
  
  Téo DECONINCK  : réalisation du rapport 
  
@@ -24,7 +24,7 @@ Semaine 2:
  
  Raphael DANY  : à compléter le sql avec les insert 
   
- *4ième scéance
+ * 4ième scéance
  
  Téo DECONINCK : continuation du rapport 
  
@@ -34,7 +34,7 @@ Semaine 2:
  
 Semaine 3
 
- *5ième scéance 
+ * 5ième scéance 
  
  
   
