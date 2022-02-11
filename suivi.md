@@ -2,6 +2,7 @@
 
 ### Semaine 1: 
 * 1er scéance
+* 
 Raphael DANY   : Création du compte Github et Pythonanywere et apprendre a utiliser Pythonanywere.  
 
 Téo DECONINCK et Simon Nguyen: Création du MCD  + Création de table SQL. 
