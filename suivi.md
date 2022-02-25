@@ -31,14 +31,24 @@ Raphael DANY : réalisation des insert après avoir corriger ses problèmes lié
  
  Simon Nguyen : continuation du cahier des charges. 
  
- Raphaël DANY : réalisation du projet avec flask. 
+ Raphaël DANY : réalisation de l'affichage et de l'ajout des un panier 
  
 ### Semaine 3
+ Tous les membres du groupe on commencé à travailler sur le projet flask 
 
  * 5ième scéance 
  
+ Téo DECONINCK : supprétion des articles du panier 
  
-  
+ Simon Nguyen : l'ajout du panier d'un article 
+ 
+ Raphaël DANY : la validation du panier et de l'affichage et du prix total de chaque commande. 
  
  
+ * 6ième scéance 
  
+ Téo DECONINCK : supprétion des articles du panier 
+ 
+ Simon Nguyen : l'ajout du panier d'un article 
+ 
+ Raphaël DANY : la validation du panier et de l'affichage et du prix total de chaque commande.
