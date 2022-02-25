@@ -15,7 +15,7 @@ Téo DECONINCK et Simon Nguyen: modification du MCD + créations des tables.
 Raphael DANY : réalisation des insert après avoir corrigé ses problèmes liés à pythonanywere.
 
  
-#### Semaine 2:
+### Semaine 2:
  
  * 3ième séance 
  
