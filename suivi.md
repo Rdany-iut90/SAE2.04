@@ -1,4 +1,4 @@
-# Le suivi des différentes activités de la SAE pour notre groupe#
+# Le suivi des différentes activités de la SAE pour notre groupe
 
 ### Semaine 1: 
 * 1er séance
