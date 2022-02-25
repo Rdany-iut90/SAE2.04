@@ -1,11 +1,11 @@
 DROP TABLE IF EXISTS ligne_commande;
 DROP TABLE IF EXISTS a;
-DROP TABLE IF EXISTS prend_un;
-DROP TABLE IF EXISTS Panier;
-DROP TABLE IF EXISTS Payement;
 DROP TABLE IF EXISTS Commande;
+DROP TABLE IF EXISTS Avis;
+DROP TABLE IF EXISTS Newsletter;
+DROP TABLE IF EXISTS Panier;
 DROP TABLE IF EXISTS Telephone;
-DROP TABLE IF EXISTS fournisseur;
+DROP TABLE IF EXISTS Entrepot;
 DROP TABLE IF EXISTS Adresse;
 DROP TABLE IF EXISTS Marque;
 DROP TABLE IF EXISTS Etat_telephone;
@@ -14,25 +14,25 @@ DROP TABLE IF EXISTS Etat;
 DROP TABLE IF EXISTS Livraison;
 DROP TABLE IF EXISTS user;
 
-CREATE TABLE user(
-   id_User INT AUTO_INCREMENT,
-   username VARCHAR(255),
-   password VARCHAR(255),
-   role VARCHAR(255),
-   est_actif VARCHAR(3),
-   pseudo VARCHAR(255),
-   email VARCHAR(255),
-   PRIMARY KEY(id_User)
+CREATE TABLE IF NOT EXISTS user
+(
+    user_id   INT AUTO_INCREMENT,
+    username  VARCHAR(25),
+    password  VARCHAR(255),
+    role      VARCHAR(25),
+    est_actif VARCHAR(1),
+    email     VARCHAR(50),
+    PRIMARY KEY (user_id)
 );
 
 CREATE TABLE Livraison(
-   id_livraison INT AUTO_INCREMENT,
+   id_livraison INT NOT NULL AUTO_INCREMENT,
    date_livraison DATE,
    PRIMARY KEY(id_livraison)
 );
 
 CREATE TABLE Etat(
-   id_etat INT AUTO_INCREMENT,
+   id_etat INT NOT NULL AUTO_INCREMENT,
    libelle_etat VARCHAR(255),
    id_livraison INT NOT NULL,
    PRIMARY KEY(id_etat),
@@ -40,104 +40,109 @@ CREATE TABLE Etat(
 );
 
 CREATE TABLE Couleur(
-   id_couleur INT AUTO_INCREMENT,
+   id_couleur INT NOT NULL AUTO_INCREMENT,
    libelle_couleur VARCHAR(255),
    PRIMARY KEY(id_couleur)
 );
 
 CREATE TABLE Etat_telephone(
-   id_etatTelephone INT AUTO_INCREMENT,
+   id_etatTelephone INT NOT NULL AUTO_INCREMENT,
    libelle_etatTelephone VARCHAR(255),
    PRIMARY KEY(id_etatTelephone)
 );
 
 CREATE TABLE Marque(
-   id_marque INT AUTO_INCREMENT,
+   id_marque INT NOT NULL AUTO_INCREMENT,
    libelle_marque VARCHAR(255),
    PRIMARY KEY(id_marque)
 );
 
 CREATE TABLE Adresse(
-   id_adresse INT AUTO_INCREMENT,
+   id_adresse INT NOT NULL AUTO_INCREMENT,
    libelle_adresse VARCHAR(255),
    PRIMARY KEY(id_adresse)
 );
 
 
 
-CREATE TABLE fournisseur(
-    id_fournisseur INT AUTO_INCREMENT,
-    libelle_fournisseur VARCHAR(255),
-    PRIMARY KEY (id_fournisseur)
+
+CREATE TABLE Entrepot(
+   id_entrepot INT AUTO_INCREMENT,
+   nbr_telephone INT,
+   PRIMARY KEY(id_entrepot)
 );
 
 CREATE TABLE Telephone(
-   id_telephone INT AUTO_INCREMENT,
+   id_telephone INT NOT NULL  AUTO_INCREMENT,
    prix DECIMAL(7,2),
    Modele VARCHAR(255),
+   image  VARCHAR(255),
    id_marque INT NOT NULL,
    id_etatTelephone INT NOT NULL,
    id_TelephoneCouleur INT NOT NULL,
-   id_fournisseur INT NOT NULL,
+   id_entrepot INT,
    stock INT,
    PRIMARY KEY(id_telephone),
    CONSTRAINT fk_id_marque FOREIGN KEY(id_marque) REFERENCES Marque(id_marque),
    CONSTRAINT fk_id_etatTelephone FOREIGN KEY(id_etatTelephone) REFERENCES Etat_telephone(id_etatTelephone),
    CONSTRAINT fk_id_couleur FOREIGN KEY(id_TelephoneCouleur) REFERENCES Couleur(id_couleur),
-   CONSTRAINT fk_id_fournisseur FOREIGN KEY(id_fournisseur) REFERENCES fournisseur(id_fournisseur)
+   CONSTRAINT fk_id_entrepot FOREIGN KEY(id_entrepot) REFERENCES Entrepot(id_entrepot)
 );
+
+
+
+CREATE TABLE Panier(
+   id_panier INT NOT NULL AUTO_INCREMENT,
+   date_ajout DATE,
+   prix_unit DECIMAL(7,2),
+   quantite INT,
+   id_User INT NOT NULL,
+   id_telephone INT NOT NULL,
+   PRIMARY KEY(id_panier),
+   CONSTRAINT fk_id_User FOREIGN KEY(id_User) REFERENCES user(user_id),
+   CONSTRAINT fk_id_telephone FOREIGN KEY(id_telephone) REFERENCES Telephone(id_telephone)
+);
+
+CREATE TABLE Newsletter(
+    id_newsletter INT AUTO_INCREMENT
+    ,libelle_newsletter VARCHAR(255)
+    ,id_panier INT
+    ,PRIMARY KEY (id_newsletter)
+     ,CONSTRAINT fk_id_newsletter FOREIGN KEY(id_panier) REFERENCES Panier(id_panier)
+
+);
+
+CREATE TABLE Avis(
+   id_avis INT AUTO_INCREMENT,
+   nbrétoile INT,
+   commentaire VARCHAR(255),
+   id_livraison INT NOT NULL,
+   PRIMARY KEY(id_avis),
+   CONSTRAINT fk_id_avis FOREIGN KEY(id_livraison) REFERENCES Livraison(id_livraison)
+);
+
 CREATE TABLE Commande(
-   id_Commande INT AUTO_INCREMENT,
+   id_Commande INT NOT NULL AUTO_INCREMENT,
    date_achat DATE,
    user_id INT,
    etat_id INT NOT NULL,
    PRIMARY KEY(id_Commande),
-   CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES user(id_User),
+   CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES user(user_id),
    CONSTRAINT fk_etat_id FOREIGN KEY(etat_id) REFERENCES Etat(id_etat)
-);
-
-CREATE TABLE Payement(
-   id_payement INT AUTO_INCREMENT,
-   nom_payement VARCHAR(255),
-   id_Commande INT NOT NULL,
-   PRIMARY KEY(id_payement),
-  CONSTRAINT fk_id_Commande  FOREIGN KEY(id_Commande) REFERENCES Commande(id_Commande)
-);
-
-CREATE TABLE Panier(
-   id_panier INT AUTO_INCREMENT,
-   date_ajout DATE,
-   prix_unit DECIMAL(7,2),
-   quantite_panier INT,
-   id_User INT NOT NULL,
-   id_payement INT NOT NULL,
-   id_telephone INT NOT NULL,
-   PRIMARY KEY(id_panier),
-   CONSTRAINT fk_id_User FOREIGN KEY(id_User) REFERENCES user(id_User),
-   CONSTRAINT fk_id_payement FOREIGN KEY(id_payement) REFERENCES Payement(id_payement),
-   CONSTRAINT fk_id_telephone FOREIGN KEY(id_telephone) REFERENCES Telephone(id_telephone)
-);
-
-CREATE TABLE prend_un(
-   id_User INT,
-   id_telephone INT,
-   PRIMARY KEY(id_User, id_telephone),
-   FOREIGN KEY(id_User) REFERENCES user(id_User),
-   FOREIGN KEY(id_telephone) REFERENCES Telephone(id_telephone)
 );
 
 CREATE TABLE a(
    id_User INT,
    id_adresse INT,
    PRIMARY KEY(id_User, id_adresse),
-   FOREIGN KEY(id_User) REFERENCES user(id_User),
+   FOREIGN KEY(id_User) REFERENCES user(user_id),
    FOREIGN KEY(id_adresse) REFERENCES Adresse(id_adresse)
 );
 
 CREATE TABLE ligne_commande
 (
-    id_Telephone           INT ,
-    id_Commande            INT ,
+    id_Telephone          INT ,
+    id_Commande           INT  ,
     prix_unitaire          DECIMAL(7, 2),
     quantite_ligneCommande INT,
     PRIMARY KEY (id_Telephone, id_Commande),
@@ -147,17 +152,11 @@ CREATE TABLE ligne_commande
 
 
 
-INSERT INTO user (username, password, role, est_actif, pseudo, email) VALUES
-('Simon', '1004', 'Administrateur', 'OUI', 'Mizuzun', 'mizuzun03@gmail.com'),
-('Adrien', 'éclaté_au_sol', 'Membre', 'NON', 'Kezku', 'Adrien@edu.univ-fcomte.fr'),
-('Corentin', 'Patapon', 'Membre', 'NON', 'Patapignouf', 'Patapignouf@gmail.com'),
-('Teo', 'Geometrie', 'Administrateur', 'OUI', 'Kitsu', 'Kitsutsu@gmail.com'),
-('Mohammed', '1234', 'Membre', 'OUI','Fire_Blaze', 'Explosion@edu.univ-fcomte.fr'),
-('Raph', 'Raph', 'Administrateur', 'OUI', 'Razen', 'Razenzen@gmail.com'),
-('Julien', 'Pompier', 'Membre', 'OUI', 'DrJulien', 'Juliennnndu39@msn.com'),
-('William', 'Kiwi', 'Membre', 'NON', 'Srownel', 'Srownel@gmail.com'),
-('Millet', 'Millet', 'Administrateur', 'NON', 'Mimi', 'Millet@edu.univ-fcomte.fr'),
-('Giuliana', 'azerty', 'Membre', 'NON', 'Giuliana','giulianatrucphabrisio@gmail.com');
+INSERT INTO user (username, password, role, est_actif, email) VALUES
+    ('admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1, 'admin@admin.fr'),
+    ('client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1, 'client@client.fr'),
+    ('client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client', 1, 'client2@client2.fr'),
+    ('Mafuo', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1, 'Mafuo@gmail.com');
 
 INSERT INTO Livraison (date_livraison) VALUES
 ('2022-03-05'),
@@ -233,97 +232,57 @@ INSERT INTO Adresse (libelle_adresse) VALUES
 ('30 boulevard Charleroi');
 
 
-INSERT INTO fournisseur(libelle_fournisseur) VALUES
-('ChinaseEntreprise'),
-('PSDdistribution'),
-('Mfrance'),
-('Malgérie'),
-('AlidinExport'),
-('spalalaExport');
+INSERT INTO Entrepot(nbr_telephone) VALUES
+(9),
+(4),
+(6),
+(7),
+(1),
+(4);
 
 
-INSERT INTO Telephone(prix,Modele,id_marque,id_etatTelephone,id_TelephoneCouleur,id_fournisseur,stock) VALUES
-(1279.00,'Galaxy S21 Ultra 5G',1,10,10,1,15),
-(1259.00,'IPHONE 13 PRO MAX',2,2,2,2,23),
-(679.00,'HUAWEI MATE 40 PRO',10,1,3,3,14),
-(500.00,'Galaxy S20',7,8,9,1,4),
-(699.99,'IPHONE 13',6,9,1,2,5),
-(400.00,'HUAWEI MATE 30 PRO',5,4,5,6,27),
-(450.99,'XIAOMI MI 11',9,3,7,3,2),
-(200.00,'XIAOMI MI 8',4,5,8,1,3),
-(249.99,'HONOR 50 LITE',3,7,4,6,4),
-(499.90,'HONOR 50',8,6,6,5,11);
+INSERT INTO Telephone(prix,Modele,image,id_marque,id_etatTelephone,id_TelephoneCouleur,id_entrepot,stock) VALUES
+(1279.00,'Galaxy S21 Ultra 5G','samsung.jpg',1,10,10,1,15),
+(1259.00,'IPHONE 13 PRO MAX','iphone13.png',2,2,2,2,23),
+(679.00,'HUAWEI MATE 40 PRO','huaweip40.jpg',10,1,3,3,14),
+(500.00,'Galaxy S20','samsungs20.jpg',7,8,9,1,4),
+(699.99,'IPHONE 13','iphone13.jpg',6,9,1,2,5),
+(400.00,'HUAWEI MATE 30 PRO','huaweip30.jpg',5,4,5,6,27),
+(450.99,'XIAOMI MI 11','xiaomi11.png',9,3,7,3,2),
+(200.00,'XIAOMI MI 8','xiaomi8.png',4,5,8,1,3),
+(249.99,'HONOR 50 LITE','honorlite.png',3,7,4,6,4),
+(499.90,'HONOR 50','honor50.jpg',8,6,6,5,11);
+
+INSERT INTO Panier( date_ajout, id_telephone, id_User, quantite) VALUES
+('2011-04-21',1,3,0),
+('2003-04-29',2,1,0),
+('2003-04-23',3,2,0),
+('2013-06-21',4,4,1),
+('2011-04-21',6,2,0),
+('2005-05-10',5,3,0),
+('1977-09-09',7,1, 0),
+('2009-04-14',8,2,0),
+('2010-01-21',10,3,0);
+
+INSERT INTO Newsletter(libelle_newsletter, id_panier) VALUES
+('pomotion sur les telephones samsung',1),
+('pomotion sur les telephones apple',2),
+('nouveau telephone xiami',3),
+('nouveau telephone apple avec 5g intégrer',4);
 
 
+INSERT INTO Avis (nbrétoile, commentaire, id_livraison)  VALUES
+(4,'très bon telephone mais la batterie se decharge rapidement',1),
+(1,'le telephone ne s alume pas',2),
+(3,'telephone moyen',1),
+(5,'telephone parfait',5);
 
 INSERT INTO Commande (date_achat,user_id,etat_id) VALUES
 ('2022-03-05',1,1),
 ('2021-06-12',2,2),
 ('2021-12-29',3,3),
-('2020-08-05',4,4),
-('2022-06-25',5,5),
-('2021-04-15',6,6),
-('2022-10-07',7,7),
-('2020-02-10',8,8);
-
-
-
-INSERT INTO Payement( nom_payement, id_Commande) VALUES
-('carte bancaire',2),
-('paypal',3),
-('carte prépayé',1),
-('paypal',4),
-('carte bancaire',6),
-('carte bancaire',5),
-('paypal',7),
-('carte prépayé',8),
-('carte prépayé',1);
-
-INSERT INTO Panier( date_ajout, id_telephone, id_User, prix_unit, quantite_panier,  id_payement) VALUES
-('2011-04-21',1,3,1,NULL,2),
-('2003-04-29',2,1,3,NULL,1),
-('2003-04-23',3,2,2,NULL,1),
-('2013-06-21',4,4,1,NULL,1 ),
-('2011-04-21',6,6,2,NULL,2 ),
-('2005-05-10',5,7,3,NULL,1 ),
-('1977-09-09',7,5,1, NULL,1 ),
-('2009-04-14',8,8,1,NULL,1 ),
-('2010-01-21',10,9,2,NULL,3 );
-
-
-INSERT INTO ligne_commande(id_telephone, id_Commande, prix_unitaire, quantite_ligneCommande) VALUES
-(1,1,NULL,1),
-(2,3,NULL,1),
-(3,4,NULL,1),
-(4,5,NULL,2),
-(6,7,NULL,1),
-(8,8,NULL,1),
-(5,6,NULL,1),
-(7,5,NULL,1),
-(2,2,NULL,1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+('2020-08-05',1,4),
+('2022-06-25',2,5),
+('2021-04-15',1,6),
+('2022-10-07',2,7),
+('2020-02-10',1,8);
