@@ -1,23 +1,23 @@
-# Le suivi des différentes activitées de la SAE pour notre groupe#
+# Le suivi des différentes activités de la SAE pour notre groupe#
 
 ### Semaine 1: 
-* 1er scéance
+* 1er séance
 
 Raphael DANY   : Création du compte Github et Pythonanywere et apprendre a utiliser Pythonanywere.  
 
 Téo DECONINCK et Simon Nguyen: Création du MCD  + Création de table SQL. 
 
 
-* 2ième scéance 
+* 2ième séance 
  
 Téo DECONINCK et Simon Nguyen: modification du MCD + créations des tables. 
 
-Raphael DANY : réalisation des insert après avoir corriger ses problèmes liés à pythonanywere.
+Raphael DANY : réalisation des insert après avoir corrigé ses problèmes liés à pythonanywere.
 
  
 #### Semaine 2:
  
- * 3ièm scéance 
+ * 3ième séance 
  
  Téo DECONINCK  : réalisation du rapport. 
  
@@ -25,30 +25,30 @@ Raphael DANY : réalisation des insert après avoir corriger ses problèmes lié
  
  Raphael DANY  : à compléter le sql avec les insert. 
   
- * 4ième scéance
+ * 4ième séance
  
  Téo DECONINCK : continuation du rapport. 
  
  Simon Nguyen : continuation du cahier des charges. 
  
- Raphaël DANY : réalisation de l'affichage et de l'ajout des un panier 
+ Raphaël DANY : réalisation de l'affichage et de l'ajout dans un panier. 
  
 ### Semaine 3
- Tous les membres du groupe on commencé à travailler sur le projet flask 
+ Tous les membres du groupe ont commencé à travailler sur le projet flask. 
 
- * 5ième scéance 
+ * 5ième séance 
  
- Téo DECONINCK : supprétion des articles du panier 
+ Téo DECONINCK : suppréssion des articles du panier. 
  
- Simon Nguyen : l'ajout du panier d'un article 
+ Simon Nguyen : l'ajout du panier d'un article. 
  
  Raphaël DANY : la validation du panier et de l'affichage et du prix total de chaque commande. 
  
  
  * 6ième scéance 
  
- Téo DECONINCK : supprétion des articles du panier 
+ Téo DECONINCK : réalisation des filtres.
  
- Simon Nguyen : l'ajout du panier d'un article 
+ Simon Nguyen : gestion de commande par le vendeur.
  
- Raphaël DANY : la validation du panier et de l'affichage et du prix total de chaque commande.
+ Raphaël DANY : le client peut voir sa commande. 
