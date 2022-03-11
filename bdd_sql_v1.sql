@@ -1,8 +1,8 @@
+DROP TABLE IF EXISTS donne_un;
 DROP TABLE IF EXISTS ligne_commande;
 DROP TABLE IF EXISTS a;
 DROP TABLE IF EXISTS Commande;
 DROP TABLE IF EXISTS Avis;
-DROP TABLE IF EXISTS Newsletter;
 DROP TABLE IF EXISTS Panier;
 DROP TABLE IF EXISTS Telephone;
 DROP TABLE IF EXISTS Entrepot;
@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS Etat_telephone;
 DROP TABLE IF EXISTS Couleur;
 DROP TABLE IF EXISTS Etat;
 DROP TABLE IF EXISTS Livraison;
+DROP TABLE IF EXISTS payement;
 DROP TABLE IF EXISTS user;
 
 CREATE TABLE IF NOT EXISTS user
@@ -23,6 +24,15 @@ CREATE TABLE IF NOT EXISTS user
     est_actif VARCHAR(1),
     email     VARCHAR(50),
     PRIMARY KEY (user_id)
+);
+
+CREATE TABLE payement(
+   id_payement INT NOT NULL AUTO_INCREMENT,
+   nom_payement VARCHAR(255),
+   prix INT,
+   user_id INT,
+   PRIMARY KEY(id_payement),
+   FOREIGN KEY (user_id) REFERENCES user(user_id)
 );
 
 CREATE TABLE Livraison(
@@ -68,7 +78,7 @@ CREATE TABLE Adresse(
 
 CREATE TABLE Entrepot(
    id_entrepot INT AUTO_INCREMENT,
-   nbr_telephone INT,
+   stockTelephone INT,
    PRIMARY KEY(id_entrepot)
 );
 
@@ -81,7 +91,6 @@ CREATE TABLE Telephone(
    id_etatTelephone INT NOT NULL,
    id_TelephoneCouleur INT NOT NULL,
    id_entrepot INT,
-   stock INT,
    PRIMARY KEY(id_telephone),
    CONSTRAINT fk_id_marque FOREIGN KEY(id_marque) REFERENCES Marque(id_marque),
    CONSTRAINT fk_id_etatTelephone FOREIGN KEY(id_etatTelephone) REFERENCES Etat_telephone(id_etatTelephone),
@@ -103,22 +112,13 @@ CREATE TABLE Panier(
    CONSTRAINT fk_id_telephone FOREIGN KEY(id_telephone) REFERENCES Telephone(id_telephone)
 );
 
-CREATE TABLE Newsletter(
-    id_newsletter INT AUTO_INCREMENT
-    ,libelle_newsletter VARCHAR(255)
-    ,id_panier INT
-    ,PRIMARY KEY (id_newsletter)
-     ,CONSTRAINT fk_id_newsletter FOREIGN KEY(id_panier) REFERENCES Panier(id_panier)
 
-);
 
 CREATE TABLE Avis(
    id_avis INT AUTO_INCREMENT,
    nbrétoile INT,
    commentaire VARCHAR(255),
-   id_livraison INT NOT NULL,
-   PRIMARY KEY(id_avis),
-   CONSTRAINT fk_id_avis FOREIGN KEY(id_livraison) REFERENCES Livraison(id_livraison)
+   PRIMARY KEY(id_avis)
 );
 
 CREATE TABLE Commande(
@@ -150,6 +150,16 @@ CREATE TABLE ligne_commande
     FOREIGN KEY (id_Commande) REFERENCES Commande (id_Commande)
 );
 
+CREATE TABLE donne_un(
+   id_Client INT,
+   id_telephone INT,
+   id_avis INT,
+   PRIMARY KEY(id_Client, id_telephone, id_avis),
+   FOREIGN KEY(id_Client) REFERENCES user(user_id),
+   FOREIGN KEY(id_telephone) REFERENCES Telephone(id_telephone),
+   FOREIGN KEY(id_avis) REFERENCES Avis(id_avis)
+);
+
 
 
 INSERT INTO user (username, password, role, est_actif, email) VALUES
@@ -157,6 +167,14 @@ INSERT INTO user (username, password, role, est_actif, email) VALUES
     ('client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1, 'client@client.fr'),
     ('client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client', 1, 'client2@client2.fr'),
     ('Mafuo', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1, 'Mafuo@gmail.com');
+
+INSERT INTO payement(nom_payement,prix) VALUES
+  ('carte bleue',NULL),
+  ('carte bleue',NULL),
+  ('paypal',NULL),
+  ('carte bleue ',NULL),
+  ('paypal',NULL),
+  ('carte bleue',NULL);
 
 INSERT INTO Livraison (date_livraison) VALUES
 ('2022-03-05'),
@@ -232,7 +250,7 @@ INSERT INTO Adresse (libelle_adresse) VALUES
 ('30 boulevard Charleroi');
 
 
-INSERT INTO Entrepot(nbr_telephone) VALUES
+INSERT INTO Entrepot(stockTelephone) VALUES
 (9),
 (4),
 (6),
@@ -241,17 +259,17 @@ INSERT INTO Entrepot(nbr_telephone) VALUES
 (4);
 
 
-INSERT INTO Telephone(prix,Modele,image,id_marque,id_etatTelephone,id_TelephoneCouleur,id_entrepot,stock) VALUES
-(1279.00,'Galaxy S21 Ultra 5G','samsung.jpg',1,10,10,1,15),
-(1259.00,'IPHONE 13 PRO MAX','iphone13.png',2,2,2,2,23),
-(679.00,'HUAWEI MATE 40 PRO','huaweip40.jpg',10,1,3,3,14),
-(500.00,'Galaxy S20','samsungs20.jpg',7,8,9,1,4),
-(699.99,'IPHONE 13','iphone13.jpg',6,9,1,2,5),
-(400.00,'HUAWEI MATE 30 PRO','huaweip30.jpg',5,4,5,6,27),
-(450.99,'XIAOMI MI 11','xiaomi11.png',9,3,7,3,2),
-(200.00,'XIAOMI MI 8','xiaomi8.png',4,5,8,1,3),
-(249.99,'HONOR 50 LITE','honorlite.png',3,7,4,6,4),
-(499.90,'HONOR 50','honor50.jpg',8,6,6,5,11);
+INSERT INTO Telephone(prix,Modele,image,id_marque,id_etatTelephone,id_TelephoneCouleur,id_entrepot) VALUES
+(1279.00,'Galaxy S21 Ultra 5G','samsung.jpg',1,10,10,1),
+(1259.00,'IPHONE 13 PRO MAX','iphone13.png',2,2,2,2),
+(679.00,'HUAWEI MATE 40 PRO','huaweip40.jpg',10,1,3,3),
+(500.00,'Galaxy S20','samsungs20.jpg',7,8,9,1),
+(699.99,'IPHONE 13','iphone13.jpg',6,9,1,2),
+(400.00,'HUAWEI MATE 30 PRO','huaweip30.jpg',5,4,5,6),
+(450.99,'XIAOMI MI 11','xiaomi11.png',9,3,7,3),
+(200.00,'XIAOMI MI 8','xiaomi8.png',4,5,8,1),
+(249.99,'HONOR 50 LITE','honorlite.png',3,7,4,6),
+(499.90,'HONOR 50','honor50.jpg',8,6,6,5);
 
 INSERT INTO Panier( date_ajout, id_telephone, id_User, quantite) VALUES
 ('2011-04-21',1,3,0),
@@ -264,18 +282,13 @@ INSERT INTO Panier( date_ajout, id_telephone, id_User, quantite) VALUES
 ('2009-04-14',8,2,0),
 ('2010-01-21',10,3,0);
 
-INSERT INTO Newsletter(libelle_newsletter, id_panier) VALUES
-('pomotion sur les telephones samsung',1),
-('pomotion sur les telephones apple',2),
-('nouveau telephone xiami',3),
-('nouveau telephone apple avec 5g intégrer',4);
 
 
-INSERT INTO Avis (nbrétoile, commentaire, id_livraison)  VALUES
-(4,'très bon telephone mais la batterie se decharge rapidement',1),
-(1,'le telephone ne s alume pas',2),
-(3,'telephone moyen',1),
-(5,'telephone parfait',5);
+INSERT INTO Avis (nbrétoile, commentaire)  VALUES
+(4,'très bon telephone mais la batterie se decharge rapidement'),
+(1,'le telephone ne s alume pas'),
+(3,'telephone moyen'),
+(5,'telephone parfait');
 
 INSERT INTO Commande (date_achat,user_id,etat_id) VALUES
 ('2022-03-05',1,1),
@@ -286,3 +299,9 @@ INSERT INTO Commande (date_achat,user_id,etat_id) VALUES
 ('2021-04-15',1,6),
 ('2022-10-07',2,7),
 ('2020-02-10',1,8);
+
+INSERT INTO donne_un (id_Client,id_telephone,id_avis) VALUES
+(2,10,1),
+(3,4,2),
+(2,9,3),
+(3,5,4);
